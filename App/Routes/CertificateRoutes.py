@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from App.Models.PydanticModels import Certificate, CertificateCreate
@@ -7,7 +7,7 @@ from App.Controller.CertificateController import CertificateController
 from App.Auth.Auth import get_current_active_user
 from App.Models.UserModel import User  # Import User model here
 
-router = APIRouter()
+from .CommonRouter import router
 
 @router.post("/", response_model=Certificate)
 def create_certificate_for_user(

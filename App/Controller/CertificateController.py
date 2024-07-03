@@ -1,6 +1,4 @@
-from App.Models.CertificateModel import Certificate
-from App.Models.UserModel import User
-from App.Models.CommonModel import SessionLocal
+from App.Models import Certificate, SessionLocal
 
 class CertificateController:
     def __init__(self):

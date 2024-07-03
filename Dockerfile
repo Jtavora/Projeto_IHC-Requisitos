@@ -1,5 +1,5 @@
 # Use uma imagem base oficial do Python
-FROM python:3.9-slim
+FROM python:latest
 
 # Defina o diretório de trabalho dentro do contêiner
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 
 # Instale as dependências do Python
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Copie o restante do código do projeto para o contêiner
 COPY . .
