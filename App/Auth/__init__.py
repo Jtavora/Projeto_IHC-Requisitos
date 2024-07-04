@@ -1,1 +1,1 @@
-from .Auth import Auth
+from .Auth import *

@@ -1,11 +1,36 @@
-import hashlib
+from jose import jwt, JWTError
+from App.Models import UserModel, SessionLocal
+from passlib.context import CryptContext
+from datetime import datetime, timedelta
+
+crypto = CryptContext(schemes=["sha256_crypt"])
 
 class Auth:
     def __init__(self):
-        pass  # Não é necessário inicializar nada aqui no momento
+        self.secret_key = "5c7f45d6f733fc57ea8a3cea62a82531eb93b35987853d93d3d79d32329e4278"
+        self.algorithm = "HS256"
+        self.session = SessionLocal
 
-    def hash_password(self, password):
-        return hashlib.sha256(password.encode()).hexdigest()
+    def user_login(self, data):
+        with self.session() as session:
+            user = UserModel.get_user_by_username(session, username=data.username)
+            
+            if not user:
+                return None
+            if not crypto.verify(data.password, user.hashed_password):
+                return None
+            
+            exp = datetime.utcnow() + timedelta(minutes=30)
 
-    def check_password(self, password, hash):
-        return self.hash_password(password) == hash
+            payload = {
+                "sub": user.username,
+                "exp": exp
+            }
+
+            token = jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
+
+            return {
+                "access_token": token,
+                "token_type": "bearer",
+                "exp": exp.isoformat()
+            }

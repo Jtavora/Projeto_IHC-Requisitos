@@ -46,3 +46,7 @@ class CertificateResponse(BaseModel):
 class Association(BaseModel):
     user_id: UUID4
     certificate_ids: list[UUID4]
+
+class Login(BaseModel):
+    username: str
+    password: str

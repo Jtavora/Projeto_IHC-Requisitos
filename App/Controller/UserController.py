@@ -1,14 +1,13 @@
 from App.Models import UserModel, SessionLocal
-from App.Auth import Auth
+from App.Auth import crypto
 
 class UserController:
     def __init__(self):
         self.session = SessionLocal
-        self.auth = Auth()
 
     def create_user(self, user_data):
         with self.session() as session:
-            hashed_password = self.auth.hash_password(user_data.hashed_password)
+            hashed_password = crypto.hash(user_data.hashed_password)
             new_user = UserModel(
                 username=user_data.username,
                 hashed_password=hashed_password,
