@@ -11,10 +11,3 @@ def create_association(association: Association):
     if association:
         return association
     raise HTTPException(status_code=400, detail="Association already exists")
-
-@associationRouter.delete("/delete_association")
-def delete_association(association: Association):
-    association = association_controller.delete_association(association)
-    if association:
-        return association
-    raise HTTPException(status_code=400, detail="Association not found")

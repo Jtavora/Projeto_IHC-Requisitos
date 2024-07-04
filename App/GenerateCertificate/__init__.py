@@ -1,0 +1,1 @@
+from .Generate import gerar_certificado
