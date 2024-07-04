@@ -25,8 +25,8 @@ markdown-it-py==3.0.0
 MarkupSafe==2.1.5
 mdurl==0.1.2
 orjson==3.10.4
-passlib==1.7.4
 pillow==10.4.0
+passlib==1.7.4
 psycopg==3.1.19
 psycopg-binary==3.1.19
 psycopg2==2.9.9

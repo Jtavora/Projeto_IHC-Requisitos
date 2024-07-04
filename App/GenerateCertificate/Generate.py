@@ -46,7 +46,7 @@ def gerar_certificado(dados, nome_aluno):
     font = font.font_variant(size=font_size) 
     y_position = 750  
     x_position = 625
-    draw.text((x_position, y_position), f"{dados['curso']}", font=font, fill=(0, 0, 0, 255))
+    draw.text((x_position, y_position), f"{dados['nome_curso']}", font=font, fill=(0, 0, 0, 255))
 
     #CURSO DESCRICAO
     font_size = 40
@@ -54,7 +54,7 @@ def gerar_certificado(dados, nome_aluno):
     font = font.font_variant(size=font_size)  
     y_position = 1080  
     x_position = 1105
-    draw.text((x_position, y_position), f"{dados['curso']}", font=font, fill=(0, 0, 0, 255))
+    draw.text((x_position, y_position), f"{dados['nome_curso']}", font=font, fill=(0, 0, 0, 255))
 
     #CARGA HORARIA
     font_size = 40
@@ -62,8 +62,8 @@ def gerar_certificado(dados, nome_aluno):
     font = font.font_variant(size=font_size)  
     y_position = 1143 
     x_position = 810
-    draw.text((x_position, y_position), f"{dados['carga_horaria_curso']}h", font=font, fill=(0, 0, 0, 255))
+    draw.text((x_position, y_position), f"{dados['carga_horaria']}h", font=font, fill=(0, 0, 0, 255))
 
     #SALVA PDF
-    certificado_path = os.path.join(os.path.dirname(__file__), "certificados", f"{dados['nome_aluno']}.png")
+    certificado_path = os.path.join(os.path.dirname(__file__), "certificados", f"{nome_aluno}.png")
     image.save(certificado_path)

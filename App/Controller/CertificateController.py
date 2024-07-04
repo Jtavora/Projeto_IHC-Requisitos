@@ -9,6 +9,7 @@ class CertificateController:
             new_certificate = CertificateModel(
                 nome_coordenador=Certificate.nome_coordenador,
                 nome_curso=Certificate.nome_curso,
+                nome_professor=Certificate.nome_professor,
                 carga_horaria=Certificate.carga_horaria,
                 data_conclusao=Certificate.data_conclusao,
                 descricao=Certificate.descricao

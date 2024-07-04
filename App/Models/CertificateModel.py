@@ -24,6 +24,7 @@ class CertificateModel(Base):
             'id': self.id,
             'nome_coordenador': self.nome_coordenador,
             'nome_curso': self.nome_curso,
+            'nome_professor': self.nome_professor,
             'carga_horaria': self.carga_horaria,
             'data_conclusao': self.data_conclusao,
             'descricao': self.descricao
