@@ -1,62 +1,34 @@
-from fastapi import Depends, HTTPException
-from sqlalchemy.orm import Session
-from typing import List
-from App.Models.PydanticModels import Certificate, CertificateCreate
-from App.Models.CommonModel import SessionLocal
-from App.Controller.CertificateController import CertificateController
-from App.Auth.Auth import get_current_active_user
-from App.Models.UserModel import User  # Import User model here
+from fastapi import HTTPException
+from App.Models.PydanticModels import *
+from App.Controller import CertificateController
+from .CommonRouter import certificateRouter
 
-from .CommonRouter import router
+certificate_controller = CertificateController()
 
-@router.post("/", response_model=Certificate)
-def create_certificate_for_user(
-    certificate: CertificateCreate, 
-    db: Session = Depends(SessionLocal), 
-    current_user: User = Depends(get_current_active_user)
-):
-    certificate_controller = CertificateController(db)
-    return certificate_controller.create_certificate(
-        nome_coordenador=certificate.nome_coordenador,
-        nome_curso=certificate.nome_curso,
-        carga_horaria=certificate.carga_horaria,
-        data_conclusao=certificate.data_conclusao,
-        descricao=certificate.descricao,
-        user_id=current_user.id
-    )
+@certificateRouter.post("/create_certificate", response_model=CertificateResponse)
+def create_certificate(certificate: Certificate):
+    certificado = certificate_controller.create_certificate(certificate)
+    if certificado:
+        return certificado.to_dict()
+    raise HTTPException(status_code=400, detail="Certificate already exists")
 
-@router.get("/user/{user_id}", response_model=List[Certificate])
-def get_certificates_by_user(user_id: str, db: Session = Depends(SessionLocal)):
-    certificate_controller = CertificateController(db)
-    return certificate_controller.get_certificates_by_user(user_id)
-
-@router.get("/{certificate_id}", response_model=Certificate)
-def get_certificate_by_id(certificate_id: str, db: Session = Depends(SessionLocal)):
-    certificate_controller = CertificateController(db)
+@certificateRouter.get("/get_certificate_by_id/{certificate_id}", response_model=CertificateResponse)
+def get_certificate_by_id(certificate_id: str):
     certificate = certificate_controller.get_certificate_by_id(certificate_id)
-    if certificate is None:
-        raise HTTPException(status_code=404, detail="Certificate not found")
-    return certificate
+    if certificate:
+        return certificate.to_dict()
+    raise HTTPException(status_code=404, detail="Certificate not found")
 
-@router.delete("/{certificate_id}", response_model=Certificate)
-def delete_certificate(certificate_id: str, db: Session = Depends(SessionLocal)):
-    certificate_controller = CertificateController(db)
-    certificate = certificate_controller.get_certificate_by_id(certificate_id)
-    if certificate is None:
-        raise HTTPException(status_code=404, detail="Certificate not found")
-    return certificate_controller.delete_certificate(certificate_id)
+@certificateRouter.delete("/delete_certificate/{certificate_id}", response_model=CertificateResponse)
+def delete_certificate(certificate_id: str):
+    certificate = certificate_controller.delete_certificate(certificate_id)
+    if certificate:
+        return certificate.to_dict()
+    raise HTTPException(status_code=404, detail="Certificate not found")
 
-@router.put("/{certificate_id}", response_model=Certificate)
-def update_certificate(certificate_id: str, certificate: CertificateCreate, db: Session = Depends(SessionLocal)):
-    certificate_controller = CertificateController(db)
-    db_certificate = certificate_controller.get_certificate_by_id(certificate_id)
-    if db_certificate is None:
-        raise HTTPException(status_code=404, detail="Certificate not found")
-    return certificate_controller.update_certificate(
-        certificate_id=certificate_id,
-        nome_coordenador=certificate.nome_coordenador,
-        nome_curso=certificate.nome_curso,
-        carga_horaria=certificate.carga_horaria,
-        data_conclusao=certificate.data_conclusao,
-        descricao=certificate.descricao
-    )
+@certificateRouter.put("/update_certificate/{certificate_id}", response_model=CertificateResponse)
+def update_certificate(certificate_id: str, certificate: Certificate):
+    updated_certificate = certificate_controller.update_certificate(certificate_id, certificate)
+    if updated_certificate:
+        return updated_certificate.to_dict()
+    raise HTTPException(status_code=404, detail="Certificate not found")

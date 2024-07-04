@@ -1,39 +1,34 @@
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy.orm import Session
-from datetime import timedelta
-from App.Models.PydanticModels import User, UserCreate, Token
-from App.Models.CommonModel import SessionLocal
-from App.Controller.UserController import UserController
-from App.Auth.Auth import authenticate_user, create_access_token, get_current_active_user, get_password_hash, ACCESS_TOKEN_EXPIRE_MINUTES
+from fastapi import HTTPException
+from App.Models.PydanticModels import *
+from App.Controller import UserController
+from .CommonRouter import userRouter
 
-from .CommonRouter import router
+user_controller = UserController()
 
-@router.post("/token", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    db = SessionLocal()
-    user = authenticate_user(db, form_data.username, form_data.password)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
-    )
-    return {"access_token": access_token, "token_type": "bearer"}
+@userRouter.post("/create_user", response_model=UserResponse)
+def create_user(user: User):
+    usuario = user_controller.create_user(user)
+    if usuario:
+        return usuario.to_dict()
+    raise HTTPException(status_code=400, detail="User already exists")
 
-@router.post("/", response_model=User)
-def create_user(user: UserCreate, db: Session = Depends(SessionLocal)):
-    user_controller = UserController(db)
-    db_user = user_controller.get_user_by_username(username=user.username)
-    if db_user:
-        raise HTTPException(status_code=400, detail="Username already registered")
-    hashed_password = get_password_hash(user.password)
-    return user_controller.create_user(username=user.username, hashed_password=hashed_password, role=user.role)
+@userRouter.get("/get_user_by_username/{username}", response_model=UserResponse)
+def get_user_by_username(username: str):
+    user = user_controller.get_user_by_username(username)
+    if user:
+        return user.to_dict()
+    raise HTTPException(status_code=404, detail="User not found")
 
-@router.get("/me/", response_model=User)
-async def read_users_me(current_user: User = Depends(get_current_active_user)):
-    return current_user
+@userRouter.delete("/delete_user/{user_id}", response_model=UserResponse)
+def delete_user(user_id: str):
+    user = user_controller.delete_user(user_id)
+    if user:
+        return user.to_dict()
+    raise HTTPException(status_code=404, detail="User not found")
+
+@userRouter.put("/update_user/{user_name}", response_model=UserResponse)
+def update_user(user_name: str, user: UserUpdate):
+    updated_user = user_controller.update_user(user_name, user)
+    if updated_user:
+        return updated_user.to_dict()
+    raise HTTPException(status_code=404, detail="User not found")

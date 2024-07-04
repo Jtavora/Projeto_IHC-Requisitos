@@ -1,40 +1,48 @@
-from pydantic import BaseModel, UUID4
-from typing import List, Optional
+from pydantic import BaseModel, UUID4, validator, Field
+from typing import Optional
 
-class CertificateBase(BaseModel):
+class User(BaseModel):
+    username: str
+    hashed_password: str
+    role: str
+
+    @validator('role')
+    def validate_role(cls, role):
+        if role not in ['admin', 'user']:
+            raise ValueError('Role must be admin or user')
+        return role
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+class UserUpdate(BaseModel):
+    username: str
+    role: str
+
+class UserResponse(BaseModel):
+    id: UUID4
+    username: str
+    hashed_password: str
+    role: str
+
+class Certificate(BaseModel):
     nome_coordenador: str
     nome_curso: str
     carga_horaria: int
     data_conclusao: str
     descricao: str
+    user_id: Optional[UUID4] = Field(None)
 
-class CertificateCreate(CertificateBase):
-    pass
-
-class Certificate(CertificateBase):
+class CertificateResponse(BaseModel):
     id: UUID4
+    nome_coordenador: str
+    nome_curso: str
+    carga_horaria: int
+    data_conclusao: str
+    descricao: str
+    user_id: Optional[UUID4] = Field(None)
+
+class Association(BaseModel):
     user_id: UUID4
-
-    class Config:
-        from_attributes = True  # Use 'from_attributes' instead of 'orm_mode'
-
-class UserBase(BaseModel):
-    username: str
-    role: str
-
-class UserCreate(UserBase):
-    password: str
-
-class User(UserBase):
-    id: UUID4
-    certificates: List[Certificate] = []
-
-    class Config:
-        from_attributes = True  # Use 'from_attributes' instead of 'orm_mode'
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-class TokenData(BaseModel):
-    username: Optional[str] = None
+    certificate_ids: list[UUID4]

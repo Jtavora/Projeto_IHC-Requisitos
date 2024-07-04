@@ -1,7 +1,6 @@
 from fastapi import FastAPI
-import App.Routes
-import App.Models
-from App.Routes import router
+from App.Routes import userRouter, certificateRouter
+from App.Routes import associationRouter
 
 app = FastAPI()
 
@@ -9,5 +8,6 @@ app = FastAPI()
 def read_root():
     return {"Hello": "World"}
 
-app.include_router(router, prefix="/users", tags=["users"])
-app.include_router(router, prefix="/certificates", tags=["certificates"])
+app.include_router(userRouter, prefix="/users", tags=["users"])
+app.include_router(certificateRouter, prefix="/certificates", tags=["certificates"])
+app.include_router(associationRouter, prefix="/associations", tags=["associations"])

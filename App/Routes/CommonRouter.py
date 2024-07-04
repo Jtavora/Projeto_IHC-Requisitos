@@ -1,3 +1,5 @@
 from fastapi import APIRouter
 
-router = APIRouter()
+userRouter = APIRouter()
+certificateRouter = APIRouter()
+associationRouter = APIRouter()

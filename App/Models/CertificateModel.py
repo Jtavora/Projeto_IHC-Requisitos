@@ -5,7 +5,7 @@ from App.Models.CommonModel import Base
 
 import uuid
 
-class Certificate(Base):
+class CertificateModel(Base):
     __tablename__ = 'certificates'
 
     id = Column(UUIDType(binary=False), primary_key=True, default=uuid.uuid4)
@@ -16,54 +16,61 @@ class Certificate(Base):
     descricao = Column(String)
 
     user_id = Column(UUIDType(binary=False), ForeignKey('users.id'))
-    user = relationship('User', back_populates='certificates')
+    user = relationship('UserModel', back_populates='certificates')
 
-    @staticmethod
-    def to_dict(certificate):
+    def to_dict(self):
         return {
-            'id': certificate.id,
-            'nome_coordenador': certificate.nome_coordenador,
-            'nome_curso': certificate.nome_curso,
-            'carga_horaria': certificate.carga_horaria,
-            'data_conclusao': certificate.data_conclusao,
-            'descricao': certificate.descricao
+            'id': self.id,
+            'nome_coordenador': self.nome_coordenador,
+            'nome_curso': self.nome_curso,
+            'carga_horaria': self.carga_horaria,
+            'data_conclusao': self.data_conclusao,
+            'descricao': self.descricao
         }
     
     @staticmethod
     def create_certificate(Session, Certificate):
-        with Session.begin():
-            Session.add(Certificate)
-            Session.commit()
-            return Certificate
+        Session.begin()
+        Session.add(Certificate)
+        Session.commit()
+        return Certificate
     
     @staticmethod
     def get_certificates_by_user(Session, user_id):
-        with Session.begin():
-            certificates = Session.query(Certificate).filter(Certificate.user_id == user_id).all()
-            return certificates
+        Session.begin()
+        certificates = Session.query(CertificateModel).filter(CertificateModel.user_id == user_id).all()
+        return certificates
         
     @staticmethod
     def get_certificate_by_id(Session, certificate_id):
-        with Session.begin():
-            certificate = Session.query(Certificate).filter(Certificate.id == certificate_id).first()
-            return certificate
+        Session.begin()
+        certificate = Session.query(CertificateModel).filter(CertificateModel.id == certificate_id).first()
+        return certificate
     
     @staticmethod
     def delete_certificate(Session, certificate_id):
-        with Session.begin():
-            certificate = Session.query(Certificate).filter(Certificate.id == certificate_id).first()
-            Session.delete(certificate)
-            Session.commit()
-            return certificate
-    
+        Session.begin()
+        certificate = Session.query(CertificateModel).filter(CertificateModel.id == certificate_id).first()
+        Session.delete(certificate)
+        Session.commit()
+        return certificate
+
     @staticmethod
-    def update_certificate(Session, certificate_id, certificate):
-        with Session.begin():
-            certificate = Session.query(Certificate).filter(Certificate.id == certificate_id).first()
-            certificate.nome_coordenador = certificate.nome_coordenador
-            certificate.nome_curso = certificate.nome_curso
-            certificate.carga_horaria = certificate.carga_horaria
-            certificate.data_conclusao = certificate.data_conclusao
-            certificate.descricao = certificate.descricao
-            Session.commit()
-            return certificate
+    def update_certificate(Session, certificate_id, certificate_data):
+        Session.begin()
+        certificate = Session.query(CertificateModel).filter(CertificateModel.id == certificate_id).first()
+        certificate.nome_coordenador = certificate_data.nome_coordenador
+        certificate.nome_curso = certificate_data.nome_curso
+        certificate.carga_horaria = certificate_data.carga_horaria
+        certificate.data_conclusao = certificate_data.data_conclusao
+        certificate.descricao = certificate_data.descricao
+        if certificate_data.user_id:
+            certificate.user_id = certificate_data.user_id
+        Session.commit()
+        return certificate
+
+    @staticmethod
+    def get_certificates_by_ids(Session, certificate_ids):
+        Session.begin()
+        certificates = Session.query(CertificateModel).filter(CertificateModel.id.in_(certificate_ids)).all()
+        return certificates

@@ -1,2 +1,3 @@
 from .CertificateController import CertificateController
 from .UserController import UserController
+from .AssociaionController import AssociationController
