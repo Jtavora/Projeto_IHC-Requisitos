@@ -34,3 +34,10 @@ class Auth:
                 "token_type": "bearer",
                 "exp": exp.isoformat()
             }
+        
+    def verify_token(self, token):
+        try:
+            payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
+            return payload
+        except JWTError:
+            return None

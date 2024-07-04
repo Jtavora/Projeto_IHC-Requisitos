@@ -13,3 +13,10 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     if not token:
         raise HTTPException(status_code=401, detail="Invalid credentials")
     return token
+
+@loginRouter.get("/verify")
+async def verify(token: str):
+    payload = auth.verify_token(token)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    return payload
