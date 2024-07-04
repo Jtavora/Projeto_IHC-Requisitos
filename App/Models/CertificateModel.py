@@ -30,26 +30,22 @@ class CertificateModel(Base):
     
     @staticmethod
     def create_certificate(Session, Certificate):
-        Session.begin()
         Session.add(Certificate)
         Session.commit()
         return Certificate
     
     @staticmethod
     def get_certificates_by_user(Session, user_id):
-        Session.begin()
         certificates = Session.query(CertificateModel).filter(CertificateModel.user_id == user_id).all()
         return certificates
         
     @staticmethod
     def get_certificate_by_id(Session, certificate_id):
-        Session.begin()
         certificate = Session.query(CertificateModel).filter(CertificateModel.id == certificate_id).first()
         return certificate
     
     @staticmethod
     def delete_certificate(Session, certificate_id):
-        Session.begin()
         certificate = Session.query(CertificateModel).filter(CertificateModel.id == certificate_id).first()
         Session.delete(certificate)
         Session.commit()
@@ -57,7 +53,6 @@ class CertificateModel(Base):
 
     @staticmethod
     def update_certificate(Session, certificate_id, certificate_data):
-        Session.begin()
         certificate = Session.query(CertificateModel).filter(CertificateModel.id == certificate_id).first()
         certificate.nome_coordenador = certificate_data.nome_coordenador
         certificate.nome_curso = certificate_data.nome_curso
@@ -71,6 +66,5 @@ class CertificateModel(Base):
 
     @staticmethod
     def get_certificates_by_ids(Session, certificate_ids):
-        Session.begin()
         certificates = Session.query(CertificateModel).filter(CertificateModel.id.in_(certificate_ids)).all()
         return certificates

@@ -20,12 +20,14 @@ class Auth:
     def user_login(self, data):
         with self.session() as session:
             if data.username == "admin" and data.password == "admin":
-                user = UserModel(username="admin", hashed_password=crypto.hash("admin"))
-            else:
-                user = UserModel.get_user_by_username(session, username=data.username)
+                user = UserModel.get_user_by_username(session, "admin")
                 if not user:
-                    return None
-                if not crypto.verify(data.password, user.hashed_password):
+                    user = UserModel(username="admin", hashed_password=crypto.hash("admin"), role="admin")
+                    UserModel.create_user(session, user)
+            else:
+                # Busca o usuário no banco de dados
+                user = UserModel.get_user_by_username(session, username=data.username)
+                if not user or not crypto.verify(data.password, user.hashed_password):
                     return None
             
             exp = datetime.utcnow() + timedelta(minutes=30)

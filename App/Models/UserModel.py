@@ -25,20 +25,17 @@ class UserModel(Base):
 
     @staticmethod
     def create_user(Session, User):
-        Session.begin()
         Session.add(User)
         Session.commit()
         return User
 
     @staticmethod
     def get_user_by_username(Session, username):
-        Session.begin()
         user = Session.query(UserModel).filter(UserModel.username == username).first()
         return user
 
     @staticmethod
     def delete_user(Session, user_id):
-        Session.begin()
         user = Session.query(UserModel).filter(UserModel.id == user_id).first()
         if user:
             Session.delete(user)
@@ -47,7 +44,6 @@ class UserModel(Base):
     
     @staticmethod
     def update_user(Session, user_name, user_data):
-        Session.begin()
         user = Session.query(UserModel).filter(UserModel.username == user_name).first()
         if user:
             user.username = user_data.username
@@ -58,13 +54,11 @@ class UserModel(Base):
     
     @staticmethod
     def get_user_by_id(Session, user_id):
-        Session.begin()
         user = Session.query(UserModel).filter(UserModel.id == user_id).first()
         return user
 
     @staticmethod
     def insert_certificates(Session, user_id, certificate_ids):
-        Session.begin()
         user = Session.query(UserModel).filter(UserModel.id == user_id).first()
         for certificate_id in certificate_ids:
             certificate = Session.query(CertificateModel).filter(CertificateModel.id == certificate_id).first()

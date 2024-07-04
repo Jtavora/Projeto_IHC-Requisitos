@@ -1,1 +1,1 @@
-from .Generate import gerar_certificado
+from .Generate import *

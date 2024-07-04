@@ -1,10 +1,10 @@
 import os
-from PIL import ImageFont, ImageDraw, Image  
+from PIL import Image, ImageDraw, ImageFont
 from datetime import date
 
 hoje = date.today()
 
-def gerar_certificado(dados):
+def gerar_certificado(dados, nome_aluno):
     print(f'Gerando pdf...')
     image = Image.open(os.path.join(os.path.dirname(__file__), 'Model.png'))
     draw = ImageDraw.Draw(image)  
@@ -14,7 +14,7 @@ def gerar_certificado(dados):
     font = ImageFont.load_default()
     font = font.font_variant(size=font_size)  
     y_position = 990  
-    draw.text((450, y_position), f"{dados['nome_aluno']}", font=font, fill=(0, 0, 0, 255))
+    draw.text((450, y_position), nome_aluno, font=font, fill=(0, 0, 0, 255))
 
     #NOME DO COORDENADOR
     font_size = 50  # Tamanho da fonte
