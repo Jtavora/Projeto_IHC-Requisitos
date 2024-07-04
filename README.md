@@ -31,7 +31,7 @@ sudo docker-compose up -d
 # Teste o sistema
 ```
 
-#Detalhe
+# Detalhe
 Ao executar pode dar erro ai baixar o pillow.
 Entre no log do container e veja.
 Caso tenha dado, basta entrar no bash do container e dar "pip install pillow"
