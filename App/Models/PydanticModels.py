@@ -29,6 +29,7 @@ class UserResponse(BaseModel):
 class Certificate(BaseModel):
     nome_coordenador: str
     nome_curso: str
+    nome_professor: str
     carga_horaria: int
     data_conclusao: str
     descricao: str
@@ -38,6 +39,7 @@ class CertificateResponse(BaseModel):
     id: UUID4
     nome_coordenador: str
     nome_curso: str
+    nome_professor: str
     carga_horaria: int
     data_conclusao: str
     descricao: str

@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Integer, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, joinedload
 from sqlalchemy_utils import UUIDType
 from App.Models.CommonModel import Base
 
@@ -11,6 +11,7 @@ class CertificateModel(Base):
     id = Column(UUIDType(binary=False), primary_key=True, default=uuid.uuid4)
     nome_coordenador = Column(String)
     nome_curso = Column(String)
+    nome_professor = Column(String)
     carga_horaria = Column(Integer)
     data_conclusao = Column(String)
     descricao = Column(String)
@@ -41,7 +42,7 @@ class CertificateModel(Base):
         
     @staticmethod
     def get_certificate_by_id(Session, certificate_id):
-        certificate = Session.query(CertificateModel).filter(CertificateModel.id == certificate_id).first()
+        certificate = Session.query(CertificateModel).options(joinedload(CertificateModel.user)).filter(CertificateModel.id == certificate_id).first()
         return certificate
     
     @staticmethod
