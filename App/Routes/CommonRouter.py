@@ -7,7 +7,8 @@ authe = Auth()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 def token_verifier(token: str = Depends(oauth_scheme)):
-    authe.verify_token(token)
+    data = authe.verify_token(token)
+    return data
 
 userRouter = APIRouter(dependencies=[Depends(token_verifier)])
 certificateRouter = APIRouter(dependencies=[Depends(token_verifier)])
