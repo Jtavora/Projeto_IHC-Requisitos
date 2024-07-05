@@ -27,7 +27,8 @@ class CertificateModel(Base):
             'nome_professor': self.nome_professor,
             'carga_horaria': self.carga_horaria,
             'data_conclusao': self.data_conclusao,
-            'descricao': self.descricao
+            'descricao': self.descricao,
+            'user_id': None if not self.user_id else self.user_id
         }
     
     @staticmethod

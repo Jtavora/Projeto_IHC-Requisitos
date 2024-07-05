@@ -147,7 +147,7 @@ def admin_view_certificates():
     
     if response.status_code == 200:
         certificates = response.json()
-        return render_template('admin_view_certificates.html', certificates=certificates)
+        return render_template('admin_view_certificates.html', certificates=certificates, users = requests.get(f'{API_URL}/users/get_all_users', headers={'Authorization': f'Bearer {token}'}).json())
     else:
         flash('Failed to retrieve certificates. Please try again.', 'error')
         return redirect(url_for('admin_dashboard'))

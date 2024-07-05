@@ -20,56 +20,63 @@
     <ul class="list-group mt-3">
         {% for cert in certificates %}
             <li class="list-group-item">
-                <form method="POST" action="{{ url_for('admin_view_certificates') }}">
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label for="nome_curso">Nome do Curso</label>
-                            <input type="text" class="form-control" name="nome_curso" value="{{ cert.nome_curso }}" readonly>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="nome_coordenador">Nome do Coordenador</label>
-                            <input type="text" class="form-control" name="nome_coordenador" value="{{ cert.nome_coordenador }}" readonly>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="nome_professor">Nome do Professor</label>
-                            <input type="text" class="form-control" name="nome_professor" value="{{ cert.nome_professor }}" readonly>
-                        </div>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('admin_view_certificates') }}">
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="nome_curso">Nome do Curso</label>
+                                    <input type="text" class="form-control" name="nome_curso" value="{{ cert.nome_curso }}" readonly>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="nome_coordenador">Nome do Coordenador</label>
+                                    <input type="text" class="form-control" name="nome_coordenador" value="{{ cert.nome_coordenador }}" readonly>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="nome_professor">Nome do Professor</label>
+                                    <input type="text" class="form-control" name="nome_professor" value="{{ cert.nome_professor }}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="carga_horaria">Carga Horária</label>
+                                    <input type="number" class="form-control" name="carga_horaria" value="{{ cert.carga_horaria }}" readonly>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="data_conclusao">Data de Conclusão</label>
+                                    <input type="text" class="form-control" name="data_conclusao" value="{{ cert.data_conclusao }}" readonly>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="descricao">Descrição</label>
+                                    <input type="text" class="form-control" name="descricao" value="{{ cert.descricao }}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="aluno_id">Aluno</label>
+                                <select class="form-control" id="aluno_id" name="user_id" {% if not cert.editable %} disabled {% endif %} required>
+                                    <option value="">Selecione o Aluno</option>
+                                    {% for user in users %}
+                                        <option value="{{ user.id }}" {% if cert.user_id == user.id %} selected {% endif %}>{{user.username}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <input type="hidden" name="cert_id" value="{{ cert.id }}">
+                            <div class="form-row mt-3">
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-warning btn-block" onclick="enableEdit(this)">Editar</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-success btn-block d-none" name="action" value="save">Salvar</button>
+                                </div>
+                            </div>
+                            <div class="form-row mt-2">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-danger btn-block" name="action" value="delete">Deletar</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label for="carga_horaria">Carga Horária</label>
-                            <input type="number" class="form-control" name="carga_horaria" value="{{ cert.carga_horaria }}" readonly>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="data_conclusao">Data de Conclusão</label>
-                            <input type="text" class="form-control" name="data_conclusao" value="{{ cert.data_conclusao }}" readonly>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="descricao">Descrição</label>
-                            <input type="text" class="form-control" name="descricao" value="{{ cert.descricao }}" readonly>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label for="user_id">User ID</label>
-                            <input type="text" class="form-control" name="user_id" value="{{ cert.user_id }}" readonly>
-                        </div>
-                    </div>
-                    <input type="hidden" name="cert_id" value="{{ cert.id }}">
-                    <div class="form-row mt-3">
-                        <div class="col-md-6">
-                            <button type="button" class="btn btn-warning btn-block" onclick="enableEdit(this)">Editar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <button type="submit" class="btn btn-success btn-block d-none" name="action" value="save">Salvar</button>
-                        </div>
-                    </div>
-                    <div class="form-row mt-2">
-                        <div class="col-md-12">
-                            <button type="submit" class="btn btn-danger btn-block" name="action" value="delete">Deletar</button>
-                        </div>
-                    </div>
-                </form>
+                </div>
             </li>
         {% endfor %}
     </ul>
@@ -80,6 +87,7 @@
         let form = button.closest('form');
         let inputs = form.querySelectorAll('input[name]');
         inputs.forEach(input => input.removeAttribute('readonly'));
+        form.querySelector('select[name="user_id"]').removeAttribute('disabled');
         button.classList.add('d-none');
         form.querySelector('button[name="action"][value="save"]').classList.remove('d-none');
     }

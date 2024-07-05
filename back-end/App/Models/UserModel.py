@@ -72,6 +72,8 @@ class UserModel(Base):
         
         if user.role == 'admin':
             certificates = Session.query(CertificateModel).all()
+            for certificate in certificates:
+                print(certificate.to_dict())
         else:
             certificates = user.certificates
         

@@ -39,6 +39,15 @@ class CertificateController:
     
     def update_certificate(self, certificate_id, certificate):
         with self.session() as session:
-            certificate = CertificateModel.update_certificate(session, certificate_id, certificate)
+            new_certificate = CertificateModel(
+                nome_coordenador=certificate.nome_coordenador,
+                nome_curso=certificate.nome_curso,
+                nome_professor=certificate.nome_professor,
+                carga_horaria=certificate.carga_horaria,
+                data_conclusao=certificate.data_conclusao,
+                descricao=certificate.descricao,
+                user_id=None if certificate.user_id == '0' else certificate.user_id
+            )
+            certificate = CertificateModel.update_certificate(session, certificate_id, new_certificate)
             session.refresh(certificate)
             return certificate
