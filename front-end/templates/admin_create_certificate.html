@@ -1,0 +1,37 @@
+<!-- admin_create_certificate.html -->
+{% extends "base.html" %}
+
+{% block title %}Criar Certificado{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-5">Criar Certificado</h1>
+    <form method="POST" class="mt-3">
+        <div class="form-group">
+            <label for="nome_coordenador">Nome do Coordenador</label>
+            <input type="text" class="form-control" id="nome_coordenador" name="nome_coordenador" placeholder="Nome do Coordenador" required>
+        </div>
+        <div class="form-group">
+            <label for="nome_curso">Nome do Curso</label>
+            <input type="text" class="form-control" id="nome_curso" name="nome_curso" placeholder="Nome do Curso" required>
+        </div>
+        <div class="form-group">
+            <label for="nome_professor">Nome do Professor</label>
+            <input type="text" class="form-control" id="nome_professor" name="nome_professor" placeholder="Nome do Professor" required>
+        </div>
+        <div class="form-group">
+            <label for="carga_horaria">Carga Horária</label>
+            <input type="number" class="form-control" id="carga_horaria" name="carga_horaria" placeholder="Carga Horária" required>
+        </div>
+        <div class="form-group">
+            <label for="data_conclusao">Data de Conclusão</label>
+            <input type="text" class="form-control" id="data_conclusao" name="data_conclusao" placeholder="Data de Conclusão" required>
+        </div>
+        <div class="form-group">
+            <label for="descricao">Descrição</label>
+            <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Adicionar Certificado</button>
+    </form>
+</div>
+{% endblock %}

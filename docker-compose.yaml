@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  web:
-    build: .
+  api:
+    build: ./back-end/
     volumes:
-      - .:/app  # Monta o diretório atual no diretório /app dentro do contêiner
-      - /app/venv  # Preserve o ambiente virtual para acelerar os carregamentos
+      - ./back-end:/app
+      - /venv
     ports:
       - "8000:8000"
     env_file:
@@ -25,6 +25,17 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    
+  front:
+    build: ./front-end/
+    volumes:
+      - ./front-end:/app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - api
 
 volumes:
   postgres_data:

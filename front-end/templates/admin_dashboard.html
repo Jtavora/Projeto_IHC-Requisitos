@@ -1,0 +1,28 @@
+<!-- admin_dashboard.html -->
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-5 text-center rounded-pill py-3" style="background-color: #007bff; color: #fff;">Admin Dashboard</h1>
+    <div class="card-deck mt-5">
+        <div class="card text-center">
+            <img src="{{ url_for('static', filename='img/cert.png') }}" class="card-img-top" alt="Certificate Image">
+            <div class="card-body">
+                <h5 class="card-title">Criar Certificado</h5>
+                <p class="card-text">Crie novos certificados para usuários.</p>
+                <a href="{{ url_for('admin_create_certificate') }}" class="btn btn-primary">Criar Certificado</a>
+            </div>
+        </div>
+        <div class="card text-center">
+            <img src="{{ url_for('static', filename='img/cert2.jpg') }}" class="card-img-top" alt="Edit Image">
+            <div class="card-body">
+                <h5 class="card-title">Visualizar/Editar Certificados</h5>
+                <p class="card-text">Veja e edite certificados existentes.</p>
+                <a href="{{ url_for('admin_view_certificates') }}" class="btn btn-primary">Visualizar/Editar</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
