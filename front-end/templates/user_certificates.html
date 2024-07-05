@@ -1,32 +1,27 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Certificados</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container">
-        <h1 class="mt-5">Seus Certificados</h1>
-        {% if certificates %}
-            {% for cert in certificates %}
-                <div class="certificate-item">
-                    <h2 class="certificate-title">{{ cert.nome_curso }}</h2>
-                    <p class="certificate-details"><strong>Coordenador:</strong> {{ cert.nome_coordenador }}</p>
-                    <p class="certificate-details"><strong>Professor:</strong> {{ cert.nome_professor }}</p>
-                    <p class="certificate-details"><strong>Carga Horária:</strong> {{ cert.carga_horaria }}</p>
-                    <p class="certificate-details"><strong>Data de Conclusão:</strong> {{ cert.data_conclusao }}</p>
-                    <p class="certificate-details"><strong>Descrição:</strong> {{ cert.descricao }}</p>
-                    
-                    <!-- Botão de download -->
-                    <a href="{{ url_for('download', certificate_id=cert.id) }}" class="btn btn-primary">Baixar Certificado</a>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p>Você não possui certificados.</p>
-        {% endif %}
-        <a href="{{ url_for('logout') }}" class="btn btn-secondary logout-btn">Logout</a>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Seus Certificados{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-5">Seus Certificados</h1>
+    {% if certificates %}
+        {% for cert in certificates %}
+            <div class="certificate-item">
+                <h2 class="certificate-title">{{ cert.nome_curso }}</h2>
+                <p class="certificate-details"><strong>Coordenador:</strong> {{ cert.nome_coordenador }}</p>
+                <p class="certificate-details"><strong>Professor:</strong> {{ cert.nome_professor }}</p>
+                <p class="certificate-details"><strong>Carga Horária:</strong> {{ cert.carga_horaria }}</p>
+                <p class="certificate-details"><strong>Data de Conclusão:</strong> {{ cert.data_conclusao }}</p>
+                <p class="certificate-details"><strong>Descrição:</strong> {{ cert.descricao }}</p>
+                
+                <!-- Botão de download -->
+                <a href="{{ url_for('download', certificate_id=cert.id) }}" class="btn btn-primary">Baixar Certificado</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Você não possui certificados.</p>
+    {% endif %}
+    <a href="{{ url_for('logout') }}" class="btn btn-secondary logout-btn">Logout</a>
+</div>
+{% endblock %}

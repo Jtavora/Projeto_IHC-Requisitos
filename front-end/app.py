@@ -13,7 +13,7 @@ API_URL = 'http://api:8000/'
 
 @app.route('/')
 def home():
-    return redirect(url_for('login'))
+    return render_template('home.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -63,7 +63,7 @@ def admin_dashboard():
 
     if session.get('role') != 'admin':
         flash('Unauthorized access.', 'error')
-        return redirect(url_for('login'))
+        return redirect(url_for('home'))
 
     return render_template('admin_dashboard.html')
 

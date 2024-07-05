@@ -6,6 +6,17 @@
 {% block content %}
 <div class="container">
     <h1 class="mt-5 text-center rounded-pill py-3" style="background-color: #007bff; color: #fff;">Admin Dashboard</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
     <div class="card-deck mt-5">
         <div class="card text-center">
             <img src="{{ url_for('static', filename='img/cert.png') }}" class="card-img-top" alt="Certificate Image">

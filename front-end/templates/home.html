@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-5">Bem-vindo à Página Inicial</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ url_for('static', filename='img/DEV.jpg') }}" class="card-img-top" alt="Developer 1">
+                <div class="card-body">
+                    <h5 class="card-title">Desenvolvedor Back-end</h5>
+                    <p class="card-text">So silascou</p>
+                    <a href="#" class="btn btn-primary">Perfil</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ url_for('static', filename='img/DEV2.jpg') }}" class="card-img-top" alt="Developer 2">
+                <div class="card-body">
+                    <h5 class="card-title">Desenvolvedor Front-end</h5>
+                    <p class="card-text">Tomou uma coca pra fazer</p>
+                    <a href="#" class="btn btn-primary">Perfil</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ url_for('static', filename='img/DEV3.jpg') }}" class="card-img-top" alt="Developer 3">
+                <div class="card-body">
+                    <h5 class="card-title">Designer</h5>
+                    <p class="card-text">Ajuda do GPT</p>
+                    <a href="#" class="btn btn-primary">Perfil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

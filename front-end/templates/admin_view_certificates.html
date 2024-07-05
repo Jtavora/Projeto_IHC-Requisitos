@@ -6,6 +6,17 @@
 {% block content %}
 <div class="container">
     <h1 class="mt-5 text-center">Visualizar/Editar Certificados</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <ul class="list-group mt-3">
         {% for cert in certificates %}
             <li class="list-group-item">
