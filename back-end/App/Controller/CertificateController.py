@@ -12,7 +12,8 @@ class CertificateController:
                 nome_professor=Certificate.nome_professor,
                 carga_horaria=Certificate.carga_horaria,
                 data_conclusao=Certificate.data_conclusao,
-                descricao=Certificate.descricao
+                descricao=Certificate.descricao,
+                user_id=None if Certificate.user_id == '0' else Certificate.user_id
             )
             certificate = CertificateModel.create_certificate(session, new_certificate)
             session.refresh(certificate)

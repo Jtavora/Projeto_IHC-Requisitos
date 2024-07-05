@@ -31,7 +31,18 @@
             <label for="descricao">Descrição</label>
             <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Adicionar Certificado</button>
+        <div class="form-group">
+            <label for="aluno_id">Aluno</label>
+            <select class="form-control" id="aluno_id" name="user_id" required>
+                <option value="">Selecione o Aluno</option>
+                {% for user in users %}
+                <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Adicionar Certificado</button>
+        </div>
     </form>
 </div>
 {% endblock %}

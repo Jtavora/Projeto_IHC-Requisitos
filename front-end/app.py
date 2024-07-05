@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
 from flask_bootstrap import Bootstrap
 import requests
+from io import BytesIO
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
@@ -74,14 +75,19 @@ def admin_create_certificate():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
+        user_id = request.form.get('user_id')
         payload = {
             'nome_coordenador': request.form['nome_coordenador'],
             'nome_curso': request.form['nome_curso'],
             'nome_professor': request.form['nome_professor'],
             'carga_horaria': int(request.form['carga_horaria']),
             'data_conclusao': request.form['data_conclusao'],
-            'descricao': request.form['descricao']
+            'descricao': request.form['descricao'],
+            'user_id': None if user_id == '0' else user_id
         }
+        
+        print("Payload to be sent:", payload)  # Depuração
+
         headers = {'Authorization': f'Bearer {token}'}
         response = requests.post(f'{API_URL}/certificates/create_certificate', json=payload, headers=headers)
 
@@ -91,7 +97,12 @@ def admin_create_certificate():
         else:
             flash('Failed to add certificate. Please try again.', 'error')
 
-    return render_template('admin_create_certificate.html')
+    users = requests.get(f'{API_URL}/users/get_all_users', headers={'Authorization': f'Bearer {token}'})
+    if users.status_code == 200:
+        return render_template('admin_create_certificate.html', users=users.json())
+    else:
+        flash('Failed to fetch users. Please try again.', 'error')
+        return redirect(url_for('admin_dashboard'))
 
 @app.route('/admin/view_certificates', methods=['GET', 'POST'])
 def admin_view_certificates():
@@ -145,6 +156,26 @@ def admin_view_certificates():
 def logout():
     session.clear()
     return redirect(url_for('login'))
+
+@app.route('/download/<certificate_id>', methods=['GET'])
+def download(certificate_id):
+    token = session.get('token')
+    if not token:
+        flash('Sessão expirada. Por favor, faça login novamente.', 'error')
+        return redirect(url_for('user_certificates'))
+    
+    print(certificate_id)
+
+    response = requests.get(f'{API_URL}/certificates/generate_certificate/{certificate_id}', headers={'Authorization': f'Bearer {token}'})
+
+    if response.status_code == 200:
+        imagem_bytes = response.content
+        return send_file(BytesIO(imagem_bytes), as_attachment=True, download_name=f'certificate_{certificate_id}.png', mimetype='image/png')
+    
+    else:
+        flash('Falha ao baixar o certificado. Por favor, tente novamente.', 'error')
+        return redirect(url_for('user_certificates'))
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000, host='0.0.0.0') # Executa o servidor Flask na porta 3000

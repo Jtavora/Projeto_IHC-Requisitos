@@ -38,3 +38,8 @@ def update_user(user_name: str, user: UserUpdate):
 def get_all_certificates(user_id: str):
     certificates = user_controller.get_user_certificates(user_id)
     return [certificate.to_dict() for certificate in certificates]
+
+@userRouter.get("/get_all_users")
+def get_all_users():
+    return user_controller.get_all_users()
+

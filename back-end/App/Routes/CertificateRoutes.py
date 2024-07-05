@@ -11,6 +11,7 @@ certificate_controller = CertificateController()
 
 @certificateRouter.post("/create_certificate", response_model=CertificateResponse)
 def create_certificate(certificate: Certificate):
+    print("Payload: ", certificate.dict())
     certificado = certificate_controller.create_certificate(certificate)
     if certificado:
         return certificado.to_dict()

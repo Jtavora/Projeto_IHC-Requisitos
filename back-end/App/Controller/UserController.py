@@ -37,3 +37,8 @@ class UserController:
         with self.session() as session:
             certificates = UserModel.get_user_certificates(session, user_id)
             return certificates
+    
+    def get_all_users(self):
+        with self.session() as session:
+            users = UserModel.get_all_users(session)
+            return [user.to_dict() for user in users]

@@ -76,3 +76,8 @@ class UserModel(Base):
             certificates = user.certificates
         
         return certificates
+
+    @staticmethod
+    def get_all_users(Session):
+        users = Session.query(UserModel).all()
+        return users
